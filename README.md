@@ -1,17 +1,34 @@
-This experiment evaluate the accuracy or correctness of an LLM response to a given prompt. A labelled dataset(Questions and Answers), converted into a table column (table of information) is given to the 
-source LLM in the application. Gemini model or Claude model will be used to judge the response of source LLM for correctness. This allows us to test and understand how good the model is working.
+Project: Automated LLM Evaluation Framework (LLM-as-a-Judge)
 
-BinaryClassificationPromptTemplate is used as LLM Evaluation method. Classify as CORRECT or INCORRECT
 
-Output or Report is generated with metrics - ColumnDistributionMetric for analytics (a count graph) as distribution.
+Overview
 
-EvidentlyAI SDK is used for this application.
+This application implements a rigorous LLM-as-a-Judge architecture designed to automate the evaluation of Large Language Model (LLM) outputs. By moving away from manual "vibes-based" review, this framework leverages high-reasoning models—such as Gemini 1.5 Pro or Claude 3.5 Sonnet—to programmatically assess the accuracy and correctness of a Source LLM's responses.
+Core Methodology
 
-I defined the target_response, new_response as reference data
+The experiment utilizes the EvidentlyAI SDK to facilitate a structured evaluation pipeline. Using a Binary Classification Prompt Template, the "Judge LLM" compares a candidate response against a labeled "Ground Truth" dataset to assign a definitive CORRECT or INCORRECT label.
+Technical Workflow
 
-The output can be extracted as json and stored as dict() for input into another application.
+    Reference Alignment: The system ingests a labeled dataset consisting of predefined Questions (target_response) and model-generated outputs (new_response).
 
-Output consists of Question, Target_Response, New Response, Label, Comment, Correctness, Correctness Reasoning.
-Note that Correctness_Reasoning provides the reasoning behind judgement decision.
+    Binary Evaluation: The Judge LLM performs a semantic audit, classifying the response based on factual alignment and instruction-following.
 
-It requires an API Key from Google or Anthropic if using Claude
+    Reasoning Attribution: Beyond a simple label, the judge generates a Correctness_Reasoning field, providing transparency into the logic behind the judgment.
+
+    Metric Visualization: Utilizing the ColumnDistributionMetric, the application generates a visual distribution report (Count Graph) to analyze performance trends across the dataset.
+
+    Downstream Integration: The final evaluation report is exportable as a structured JSON/Dictionary, enabling seamless ingestion into monitoring dashboards or MLOps pipelines.
+
+Evaluation Schema
+
+Every evaluation record consists of the following data points:
+
+    Question: The original input prompt.
+
+    Target Response: The expected "Golden" answer (Ground Truth).
+
+    New Response: The actual output from the Source LLM under test.
+
+    Label: Binary classification (CORRECT / INCORRECT).
+
+    Correctness & Reasoning: A detailed qualitative analysis of the judge's decision.
